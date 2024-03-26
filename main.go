@@ -234,23 +234,6 @@ func generateFindingsInfos(findings *ecr.DescribeImageScanFindingsOutput, imageT
 }
 
 func getECRRepositories() ([]string, error) {
-	sess := session.Must(session.NewSessionWithOptions(session.Options{
-		SharedConfigState: session.SharedConfigEnable,
-	}))
-
-	svc := ecr.New(sess)
-
-	input := &ecr.DescribeRepositoriesInput{}
-
-	result, err := svc.DescribeRepositories(input)
-	if err != nil {
-		return []string{}, fmt.Errorf("failed to describe repositories: %w", err)
-	}
-
-	repositoryNames := make([]string, len(result.Repositories))
-	for i, repo := range result.Repositories {
-		repositoryNames[i] = *repo.RepositoryName
-	}
-
-	return repositoryNames, nil
+	repositoryName := []string{os.Getenv("REPO_NAME")}
+	return repositoryName, nil
 }
